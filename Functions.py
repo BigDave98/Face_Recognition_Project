@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import face_recognition
-
 from datetime import datetime
 
 def findEncodings(images):
@@ -12,7 +11,7 @@ def findEncodings(images):
         encodeList.append(encode)
     return encodeList
 
-def markAttendence(name):
+def markAttendance(name):
     with open('DataBase.csv', 'r+') as f:
         myDataList = f.readlines()
         nameList = []
@@ -50,30 +49,31 @@ def newUser(cap, encodeListKnow, newFace, encodeCurFrame):
             faceRecognition(cap, encodeListKnow, newFace)
 
 
-def faceRecognition(cap, encodeListKnow, newFace):
+def faceRecognition(cap, encodeListKnown, classNames):
     while True:
         succes, img = cap.read()
-        imgS = cv2.resize(img, (0,0), None, 0.25, 0.25)
+        imgS = cv2.resize(img,(0,0),None,0.25,0.25)
         imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
 
         facesCurFrame = face_recognition.face_locations(imgS)
         encodeCurFrame = face_recognition.face_encodings(imgS, facesCurFrame)
+
         for encodeFace, faceLoc in zip(encodeCurFrame, facesCurFrame):
-            matches = face_recognition.compare_faces(encodeListKnow, encodeFace)
-            faceDis = face_recognition.face_distance(encodeListKnow, encodeFace)
+            matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
+            faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
 
             matchIndex = np.argmin(faceDis)
+
             if matches[matchIndex]:
                 name = classNames[matchIndex].upper()
 
-                y1,x2,y2,x1 = faceLoc
-                y1, x2, y2, x1 =  y1*4,x2*4,y2*4,x1*4
+                y1, x2, y2, x1 = faceLoc
+                y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
 
-                cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0), 2)
-                cv2.rectangle((img,(x1,y2-35), (x2,y2), (0,255,0), cv2.FILLED))
-                cv2.putText(img, name, (x1 +6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255,255,255), 2)
-
-                markAttendence(name)
+                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
+                cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                markAttendance(name)
 
         cv2.imshow('Webcam', img)
         cv2.waitKey(1)
