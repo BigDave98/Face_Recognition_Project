@@ -8,11 +8,11 @@ Using the system is simple, you just need a webcam on your computer. Follow thes
 
 1. Add an image with the person's name in the `Imgs` folder.
 2. Run the `FaceRecognitionProject.py` file.
-3. The person in the photo should appear in front of the webcam. Once the person has appeared in front of the webcam, their name will be saved in the `DataBase.csv` file.
-
+3. "The person in the photo should appear in front of the webcam. Once the person has appeared in front of the webcam, their name will appear on the screen and will be saved in the DataBase.csv file.
+   
 ## How It Works
 
-To make this project possible, the main libraries used were `face_recognition` and `cv2`. These libraries greatly simplify all the image processing performed during the project.
+The main libraries used o make this project possible were `face_recognition` and `cv2`. These libraries greatly simplify all the image processing performed during the project.
 
 ## Installation
 
